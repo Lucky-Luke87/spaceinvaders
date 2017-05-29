@@ -5,13 +5,14 @@ import fr.unilim.iut.spaceinvaders.moteurjeu.Jeu;
 import fr.unilim.iut.spaceinvaders.utils.DebordementEspaceJeuException;
 import fr.unilim.iut.spaceinvaders.utils.HorsEspaceJeuException;
 
-public class SpaceInvaders implements Jeu {
+public class SpaceInvaders extends Sprite implements Jeu {
 	private static final char MARQUE_FIN_LIGNE = '\n';
 	private static final char MARQUE_VIDE = '.';
 	private static final char MARQUE_VAISSEAU = 'V';
 	int longueur;
 	int hauteur;
 	Vaisseau vaisseau;
+	Missile missile;
 
 	public SpaceInvaders(int longueur, int hauteur) {
 		this.longueur = longueur;
@@ -32,11 +33,22 @@ public class SpaceInvaders implements Jeu {
 	private char recupererMarqueDeLaPosition(int x, int y) {
 		char marque;
 		if (this.aUnVaisseauQuiOccupeLaPosition(x, y))
-			marque = MARQUE_VAISSEAU;
+			marque = Constante.MARQUE_VAISSEAU;
+		else if (this.aUnMissileQuiOccupeLaPosition(x, y))
+			marque = Constante.MARQUE_MISSILE;
 		else
-			marque = MARQUE_VIDE;
+			marque = Constante.MARQUE_VIDE;
 		return marque;
 	}
+
+	private boolean aUnMissileQuiOccupeLaPosition(int x, int y) {
+		return this.aUnMissile() && missile.occupeLaPosition(x,y);
+	}
+
+	private boolean aUnMissile() {
+		return missile != null;
+	}
+	
 
 	private boolean aUnVaisseauQuiOccupeLaPosition(int x, int y) {
 		return this.aUnVaisseau() && vaisseau.occupeLaPosition(x, y);
@@ -67,7 +79,7 @@ public class SpaceInvaders implements Jeu {
 					"Le vaisseau déborde de l'espace jeu vers le bas à cause de sa hauteur");
 		}
 
-		vaisseau = new Vaisseau(dimension, position);
+		vaisseau = new Vaisseau(dimension, position, vitesse);
 	}
 
 	private boolean estDansEspaceJeu(int x, int y) {
@@ -114,6 +126,19 @@ public class SpaceInvaders implements Jeu {
 	public void initialiserJeu() {
 		Position positionVaisseau = new Position(this.longueur / 2, this.hauteur - 1);
 		Dimension dimensionVaisseau = new Dimension(Constante.VAISSEAU_LONGUEUR, Constante.VAISSEAU_HAUTEUR);
-		positionnerUnNouveauVaisseau(dimensionVaisseau, positionVaisseau, 1);
+		positionnerUnNouveauVaisseau(dimensionVaisseau, positionVaisseau, Constante.VAISSEAU_VITESSE);
+	}
+
+	public Missile tirerUnMissile(Dimension dimensionMissile, int vitesseMissile) {
+		Position positionOrigineMissile = calculerLaPositionDeTirDuMissile(dimensionMissile);
+		return new Missile(dimensionMissile, positionOrigineMissile, vitesseMissile);
+	}
+	
+	public Position calculerLaPositionDeTirDuMissile(Dimension dimensionMissile){
+		int abscisseMilieuVaisseau = this.abscisseLaPlusAGauche() + (this.longueur() / 2);
+		int abscisseOrigineMissile = abscisseMilieuVaisseau - (dimensionMissile.longueur() / 2);
+		int ordonneeeOrigineMissile = this.ordonneeLaPlusBasse() - 1;
+		
+		return new Position(abscisseOrigineMissile,ordonneeeOrigineMissile);
 	}
 }

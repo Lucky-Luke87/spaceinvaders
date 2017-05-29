@@ -109,23 +109,23 @@ public class SpaceInvadersTest {
 		}
 	}
 
-    @Test
-    public void test_VaisseauAvance_DeplacerVaisseauVersLaDroite() {
+	 public void test_VaisseauAvance_DeplacerVaisseauVersLaDroite() {
 
-        spaceinvaders.positionnerUnNouveauVaisseau(new Dimension(3,2),new Position(7,9),3);
-        spaceinvaders.deplacerVaisseauVersLaDroite();
-        assertEquals("" + 
-        "...............\n" + 
-        "...............\n" +
-        "...............\n" + 
-        "...............\n" + 
-        "...............\n" + 
-        "...............\n" + 
-        "...............\n" + 
-        "...............\n" + 
-        "..........VVV..\n" + 
-        "..........VVV..\n" , spaceinvaders.recupererEspaceJeuDansChaineASCII());
-    }
+	       spaceinvaders.positionnerUnNouveauVaisseau(new Dimension(3,2),new Position(7,9),3);
+	       spaceinvaders.deplacerVaisseauVersLaDroite();
+	       assertEquals("" + 
+	       "...............\n" + 
+	       "...............\n" +
+	       "...............\n" + 
+	       "...............\n" + 
+	       "...............\n" + 
+	       "...............\n" + 
+	       "...............\n" + 
+	       "...............\n" + 
+	       "..........VVV..\n" + 
+	       "..........VVV..\n" , spaceinvaders.recupererEspaceJeuDansChaineASCII());
+	   }
+
 
 
     @Test
@@ -218,4 +218,23 @@ public class SpaceInvadersTest {
 	       "VVV............\n" + 
 	       "VVV............\n" , spaceinvaders.recupererEspaceJeuDansChaineASCII());
 	     }
+	 
+	 @Test
+     public void test_MissileBienTireDepuisVaisseau_VaisseauLongueurImpaireMissileLongueurImpaire() {
+
+	   spaceinvaders.positionnerUnNouveauVaisseau(new Dimension(7,2),new Position(5,9), 2);
+	   spaceinvaders.tirerUnMissile(new Dimension(3,2),2);
+
+       assertEquals("" + 
+       "...............\n" + 
+       "...............\n" +
+       "...............\n" + 
+       "...............\n" + 
+       "...............\n" + 
+       "...............\n" + 
+       ".......MMM.....\n" + 
+       ".......MMM.....\n" + 
+       ".....VVVVVVV...\n" + 
+       ".....VVVVVVV...\n" , spaceinvaders.recupererEspaceJeuDansChaineASCII());
+    }
 }
