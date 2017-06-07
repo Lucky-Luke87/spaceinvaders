@@ -14,6 +14,7 @@ public class SpaceInvaders extends Sprite implements Jeu {
 	int hauteur;
 	Vaisseau vaisseau;
 	Missile missile;
+	Direction direction;
 
 	public SpaceInvaders(int longueur, int hauteur) {
 		this.longueur = longueur;
@@ -50,7 +51,7 @@ public class SpaceInvaders extends Sprite implements Jeu {
 		return this.aUnMissile() && missile.occupeLaPosition(x, y);
 	}
 
-	private boolean aUnMissile() {
+	public boolean aUnMissile() {
 		return missile != null;
 	}
 
@@ -92,7 +93,7 @@ public class SpaceInvaders extends Sprite implements Jeu {
 
 	public void deplacerVaisseauVersLaDroite() {
 		if (vaisseau.abscisseLaPlusADroite() < (longueur - 1)) {
-			vaisseau.seDeplacerVersLaDroite();
+			vaisseau.deplacerHorizontalementVers(direction.DROITE);
 			if (!estDansEspaceJeu(vaisseau.abscisseLaPlusADroite(), vaisseau.ordonneeLaPlusHaute())) {
 				vaisseau.positionner(longueur - vaisseau.longueur(), vaisseau.ordonneeLaPlusHaute());
 			}
@@ -101,20 +102,28 @@ public class SpaceInvaders extends Sprite implements Jeu {
 
 	public void deplacerVaisseauVersLaGauche() {
 		if (0 < vaisseau.abscisseLaPlusAGauche())
-			vaisseau.seDeplacerVersLaGauche();
+			vaisseau.deplacerHorizontalementVers(direction.GAUCHE);
 		if (!estDansEspaceJeu(vaisseau.abscisseLaPlusAGauche(), vaisseau.ordonneeLaPlusHaute())) {
 			vaisseau.positionner(0, vaisseau.ordonneeLaPlusHaute());
 		}
 	}
 
 	@Override
-	public void evoluer(Commande commandeUser) {
-		if (commandeUser.gauche) {
+	public void evoluer(Commande commande) {
+		if (this.aUnMissile()) {
+			deplacerMissile();
+		}
+
+		if (commande.gauche) {
 			deplacerVaisseauVersLaGauche();
 		}
 
-		if (commandeUser.droite) {
+		if (commande.droite) {
 			deplacerVaisseauVersLaDroite();
+		}
+
+		if (commande.tir && !this.aUnMissile()) {
+			tirerUnMissile(new Dimension(Constante.MISSILE_LONGUEUR, Constante.MISSILE_HAUTEUR), Constante.MISSILE_VITESSE);
 		}
 	}
 
@@ -125,6 +134,10 @@ public class SpaceInvaders extends Sprite implements Jeu {
 
 	public Vaisseau recupererVaisseau() {
 		return this.vaisseau;
+	}
+
+	public Missile recupererMissile() {
+		return this.missile;
 	}
 
 	public void initialiserJeu() {
@@ -139,5 +152,12 @@ public class SpaceInvaders extends Sprite implements Jeu {
     	}
 
 		this.missile = this.vaisseau.tirerUnMissile(dimensionMissile, vitesseMissile);
+	}
+
+	public void deplacerMissile() {
+		missile.deplacerVerticalementVers(Direction.HAUT_ECRAN);
+		if (!estDansEspaceJeu(missile.abscisseLaPlusAGauche(), missile.ordonneeLaPlusBasse())) {
+			this.missile = null;
+		}
 	}
 }
