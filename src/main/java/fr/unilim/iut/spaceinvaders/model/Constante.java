@@ -1,4 +1,4 @@
-package fr.unilim.iut.spaceinvaders;
+package fr.unilim.iut.spaceinvaders.model;
 
 public class Constante {
 
@@ -13,8 +13,13 @@ public class Constante {
 	public static final char MARQUE_VIDE = '.';
 	public static final char MARQUE_VAISSEAU = 'V';
 	public static final char MARQUE_MISSILE = 'M';
+	public static final char MARQUE_ENVAHISSEUR = 'E';
 	
 	public static final int MISSILE_LONGUEUR = 5;
 	public static final int MISSILE_HAUTEUR = 8;
-	public static final int MISSILE_VITESSE = 30;	   
+	public static final int MISSILE_VITESSE = 30;
+
+	public static final int ENVAHISSEUR_LONGUEUR = 15;
+	public static final int ENVAHISSEUR_HAUTEUR = 10;
+	public static final int ENVAHISSEUR_VITESSE = 15;
 }
